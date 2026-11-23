@@ -1,5 +1,5 @@
 // Calculadora de Livros Divinos (Tomos Nível 1 ao 9)
-import { pw } from '../api.js';
+import { call, getState } from '../api.js';
 import { toast } from '../ui.js';
 
 const TIER_PAGES = [0, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
@@ -16,6 +16,14 @@ const FAMOUS_BOOKS = {
   8: ['Selo do Dragão', 'Chama Eterna', 'Lorde Supremo', 'Visão Celeste'],
   9: ['Criação do Mundo', 'Eternidade Divina', 'Espírito Cósmico', 'Onipotência'],
 };
+
+export function mount(container, state) {
+  render(container, state);
+}
+
+export function unmount() {}
+
+export function update(state) {}
 
 export function render(container, state) {
   const calcSettings = state.settings?.calculator || {
@@ -240,7 +248,7 @@ export function render(container, state) {
       ownedBooks,
     };
 
-    await pw.call('settings:save-calculator', newCalcSettings);
+    await call('settings:save-calculator', newCalcSettings);
     toast('Cotações e preferências da calculadora salvas com sucesso!', 'success');
   };
 

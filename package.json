@@ -1,7 +1,7 @@
 {
   "name": "pw-manager",
   "productName": "PW Manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gerenciador de contas, multi-cliente e automações para Perfect World (servidor local).",
   "main": "src/main/main.js",
   "type": "module",

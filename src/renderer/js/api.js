@@ -34,3 +34,5 @@ export async function initState() {
 }
 
 export const onEvent = (name, cb) => window.pw.on(name, cb);
+
+export const pw = { call, getState, subscribe, initState, onEvent };

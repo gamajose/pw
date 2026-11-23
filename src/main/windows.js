@@ -3,6 +3,9 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { app, BrowserWindow, Tray, Menu, nativeImage, screen } from 'electron';
 import { store } from './store.js';
+import { createLogger } from './logger.js';
+
+const log = createLogger('windows');
 
 const SRC = path.join(app.getAppPath(), 'src');
 const PRELOAD = path.join(SRC, 'main', 'preload.cjs');
@@ -33,6 +36,12 @@ function harden(win) {
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.webContents.on('will-navigate', (e, url) => {
     if (!url.startsWith('file://')) e.preventDefault();
+  });
+  win.webContents.on('console-message', (_e, level, msg, line, src) => {
+    if (level >= 2) log.warn(`[Renderer] ${msg} (${src}:${line})`);
+  });
+  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
+    log.error(`[Renderer] Falha ao carregar página: ${desc} (${code}) ${url}`);
   });
 }
 

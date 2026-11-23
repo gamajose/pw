@@ -23,6 +23,41 @@ for (const file of [...walk(path.join(root, 'src')), ...walk(path.join(root, 'sc
   }
 }
 
+// Verifica se os módulos JS importam apenas símbolos realmente exportados
+for (const file of walk(path.join(root, 'src'))) {
+  const content = fs.readFileSync(file, 'utf8');
+  const importMatches = [...content.matchAll(/import\s+\{([^}]+)\}\s+from\s+['"]([^'"]+)['"]/g)];
+  for (const match of importMatches) {
+    const symbols = match[1].split(',').map((s) => s.trim().split(/\s+as\s+/)[0]).filter(Boolean);
+    const targetRel = match[2];
+    if (targetRel.startsWith('.')) {
+      const targetPath = path.resolve(path.dirname(file), targetRel);
+      if (fs.existsSync(targetPath)) {
+        const targetContent = fs.readFileSync(targetPath, 'utf8');
+        for (const sym of symbols) {
+          const exportRegex = new RegExp(`export\\s+(?:async\\s+)?(const|function|let|class|var)\\s+${sym}\\b|export\\s*\\{[^}]*\\b${sym}\\b[^}]*\\}`);
+          if (!exportRegex.test(targetContent)) {
+            failed++;
+            console.error(`ERRO de importação em ${path.relative(root, file)}: '${sym}' não é exportado por ${targetRel}`);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Verifica se todas as views exportam a função mount()
+const viewsDir = path.join(root, 'src', 'renderer', 'js', 'views');
+for (const f of fs.readdirSync(viewsDir)) {
+  if (f.endsWith('.js')) {
+    const code = fs.readFileSync(path.join(viewsDir, f), 'utf8');
+    if (!/export\s+(?:async\s+)?function\s+mount\b/.test(code)) {
+      failed++;
+      console.error(`ERRO: view ${f} não exporta a função mount()!`);
+    }
+  }
+}
+
 // Testes das funções que não dependem do Electron.
 const keys = await import('../src/shared/keys.js');
 assert.equal(keys.vkFromName('F1'), 0x70);

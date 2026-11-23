@@ -1,7 +1,19 @@
 // Preload: expõe para a interface apenas uma API mínima e controlada.
 const { contextBridge, ipcRenderer } = require('electron');
 
-const EVENTS = new Set(['state', 'notify', 'foreground', 'sync-paused', 'theme', 'sync:log', 'memory:values', 'navigate']);
+const EVENTS = new Set([
+  'state',
+  'notify',
+  'foreground',
+  'sync-paused',
+  'theme',
+  'sync:log',
+  'memory:values',
+  'navigate',
+  'forja:update',
+  'map:coords',
+  'updater:status',
+]);
 
 function cleanError(err) {
   // O Electron prefixa erros de ipc com "Error invoking remote method 'rpc': Error: ".
