@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>PW Manager</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-logo"><i class="bi bi-controller"></i></span>
+          <div>
+            <div class="brand-name">PW Manager</div>
+            <div class="brand-sub" id="app-version"></div>
+          </div>
+        </div>
+
+        <div class="px-3 mb-3">
+          <label class="form-label small text-body-secondary mb-1" for="server-select">Servidor</label>
+          <div class="input-group input-group-sm">
+            <select class="form-select" id="server-select"></select>
+            <button class="btn btn-outline-secondary" id="server-add" title="Adicionar servidor"><i class="bi bi-plus-lg"></i></button>
+          </div>
+        </div>
+
+        <nav class="nav flex-column nav-side" id="nav">
+          <a class="nav-link" data-view="accounts" href="#"><i class="bi bi-people"></i> Contas</a>
+          <a class="nav-link" data-view="groups" href="#"><i class="bi bi-diagram-3"></i> Modo grupo</a>
+          <a class="nav-link" data-view="presets" href="#"><i class="bi bi-lightning-charge"></i> Presets</a>
+          <a class="nav-link" data-view="forja" href="#"><i class="bi bi-fire"></i> Auto Forja</a>
+          <a class="nav-link" data-view="map" href="#"><i class="bi bi-map"></i> Mapa Interativo</a>
+          <a class="nav-link" data-view="equipment" href="#"><i class="bi bi-shield-shaded"></i> Equipamentos</a>
+          <a class="nav-link" data-view="calculators" href="#"><i class="bi bi-calculator"></i> Calculadoras</a>
+          <a class="nav-link" data-view="servers" href="#"><i class="bi bi-hdd-network"></i> Servidores</a>
+          <a class="nav-link" data-view="settings" href="#"><i class="bi bi-gear"></i> Configurações</a>
+          <a class="nav-link" data-view="about" href="#"><i class="bi bi-info-circle"></i> Sobre</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="status-line" id="status-native"></div>
+          <div class="status-line" id="status-playing"></div>
+          <div class="status-line" id="status-sync"></div>
+          <button class="btn btn-sm btn-outline-danger w-100 mt-2" id="stop-all"><i class="bi bi-stop-circle"></i> Parar tudo</button>
+        </div>
+      </aside>
+
+      <main class="content" id="view"></main>
+    </div>
+
+    <div class="toast-stack" id="toasts"></div>
+
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

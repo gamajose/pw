@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Diagnóstico & Log do Sync</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 12px;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #181b20;
+        color: #f1f5f9;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 12px;
+      }
+      .panel-title {
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .panel-title i {
+        color: #38bdf8;
+      }
+      .client-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        transition: all 0.15s ease;
+      }
+      .client-card.focused {
+        border-color: #0284c7;
+        background: rgba(2, 132, 199, 0.08);
+      }
+      .client-meta {
+        font-size: 11px;
+        color: #94a3b8;
+      }
+      .client-bars {
+        margin: 6px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .mini-bar {
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+      .mini-bar-fill-hp {
+        background: #ef4444;
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+      .mini-bar-fill-mp {
+        background: #3b82f6;
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+      .log-console {
+        flex: 1;
+        background: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        overflow-y: auto;
+        color: #cbd5e1;
+      }
+      .log-entry {
+        line-height: 1.5;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 2px 0;
+      }
+      .log-time {
+        color: #64748b;
+        margin-right: 6px;
+      }
+      .log-tag {
+        font-weight: 600;
+        margin-right: 6px;
+      }
+      .log-tag.sync { color: #10b981; }
+      .log-tag.preset { color: #f59e0b; }
+      .log-tag.win { color: #38bdf8; }
+      .log-tag.perf { color: #a855f7; }
+    </style>
+  </head>
+  <body>
+    <div class="panel-header">
+      <div class="panel-title">
+        <i class="bi bi-speedometer2"></i>
+        <span>Diagnóstico & Log do Sync</span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="form-check form-switch mb-0" title="Ativa throttling de processos inativos para reduzir consumo de CPU">
+          <input class="form-check-input" type="checkbox" role="switch" id="perf-mode-switch" />
+          <label class="form-check-label small" for="perf-mode-switch">Modo Desempenho (Econ. CPU)</label>
+        </div>
+        <button class="btn btn-sm btn-outline-secondary" id="btn-clear-log" title="Limpar log">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-2 flex-grow-1 overflow-hidden">
+      <!-- Coluna esquerda: clientes e métricas -->
+      <div class="col-5 d-flex flex-column overflow-hidden">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="small text-body-secondary fw-bold text-uppercase">Clientes Monitorados</span>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="cpu-total-badge">CPU Total: 0%</span>
+        </div>
+        <div class="flex-grow-1 overflow-y-auto" id="clients-list"></div>
+      </div>
+
+      <!-- Coluna direita: stream do log em tempo real -->
+      <div class="col-7 d-flex flex-column overflow-hidden">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="small text-body-secondary fw-bold text-uppercase">Fluxo de Eventos em Tempo Real</span>
+          <span class="small text-body-secondary" id="event-count-badge">0 eventos</span>
+        </div>
+        <div class="log-console" id="log-console"></div>
+      </div>
+    </div>
+
+    <script type="module" src="js/synclog.js"></script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>HUD Grid Overlay</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        user-select: none;
+        margin: 0;
+        padding: 0;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: transparent !important;
+        pointer-events: none;
+      }
+      .grid-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      .grid-svg {
+        width: 100%;
+        height: 100%;
+      }
+      .banner {
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(56, 189, 248, 0.5);
+        color: #f8fafc;
+        padding: 8px 18px;
+        border-radius: 9999px;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-dot {
+        width: 8px;
+        height: 8px;
+        background: #38bdf8;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #38bdf8;
+      }
+      .crosshair {
+        stroke: rgba(56, 189, 248, 0.35);
+        stroke-width: 1;
+        stroke-dasharray: 4, 4;
+      }
+      .major-line {
+        stroke: rgba(56, 189, 248, 0.25);
+        stroke-width: 1;
+      }
+      .hud-box {
+        fill: rgba(56, 189, 248, 0.04);
+        stroke: rgba(56, 189, 248, 0.6);
+        stroke-width: 1.5;
+        stroke-dasharray: 6, 3;
+      }
+      .hud-label {
+        fill: #38bdf8;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-container">
+      <svg class="grid-svg" id="grid-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="smallGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.07)" stroke-width="0.75"/>
+          </pattern>
+          <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
+            <rect width="160" height="160" fill="url(#smallGrid)"/>
+            <path d="M 160 0 L 0 0 0 160" fill="none" stroke="rgba(56, 189, 248, 0.22)" stroke-width="1.25"/>
+          </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Linhas centrais de referência -->
+        <line x1="50%" y1="0" x2="50%" y2="100%" class="crosshair" />
+        <line x1="0" y1="50%" x2="100%" y2="50%" class="crosshair" />
+
+        <!-- Caixa de guia comum para janela do grupo (canto superior esquerdo) -->
+        <rect x="20" y="50" width="220" height="280" rx="4" class="hud-box" />
+        <text x="28" y="70" class="hud-label">GUIA DA HUD DE GRUPO (ALINHAR AQUI)</text>
+      </svg>
+
+      <div class="banner">
+        <span class="badge-dot"></span>
+        <span>Modo de Alinhamento de HUD Ativo — Posicione a janela da party no mesmo local em todos os clientes</span>
+      </div>
+    </div>
+  </body>
+</html>

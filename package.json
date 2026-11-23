@@ -1,0 +1,72 @@
+{
+  "name": "pw-manager",
+  "productName": "PW Manager",
+  "version": "1.0.0",
+  "description": "Gerenciador de contas, multi-cliente e automações para Perfect World (servidor local).",
+  "main": "src/main/main.js",
+  "type": "module",
+  "private": true,
+  "author": "José Luiz",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gamajose/pw.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build:native": "dotnet publish native/PwNative/PwNative.csproj -c Release -o bin",
+    "build:icon": "node scripts/make-icon.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/selftest.mjs",
+    "dist": "npm run build:native && npm run build:icon && electron-builder --win nsis",
+    "release": "npm run build:native && npm run build:icon && electron-builder --win nsis --publish always",
+    "ship": "node scripts/ship.mjs"
+  },
+  "dependencies": {
+    "bootstrap": "5.3.3",
+    "bootstrap-icons": "1.11.3",
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "br.tcc.pwmanager",
+    "productName": "PW Manager",
+    "icon": "build/icon.ico",
+    "files": [
+      "src/**/*",
+      "node_modules/bootstrap/dist/css/bootstrap.min.css",
+      "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "node_modules/bootstrap-icons/font/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "bin/PwNative.exe",
+        "to": "bin/PwNative.exe"
+      },
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "gamajose",
+        "repo": "pw"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "PW Manager"
+    }
+  }
+}

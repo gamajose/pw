@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Barra de Ferramentas</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        user-select: none;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        overflow: hidden;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      .toolbar-box {
+        background: rgba(26, 29, 33, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        padding: 6px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+      .toolbar-box.vertical {
+        flex-direction: column;
+      }
+      .drag-handle {
+        -webkit-app-region: drag;
+        cursor: move;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-tool {
+        -webkit-app-region: no-drag;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        color: #e2e8f0;
+        transition: all 0.15s ease;
+      }
+      .btn-tool:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+      .btn-tool.active {
+        background: #0d6efd;
+        color: #fff;
+        border-color: #0d6efd;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+      }
+      .btn-tool.btn-sync.active {
+        background: #198754;
+        border-color: #198754;
+        box-shadow: 0 0 10px rgba(25, 135, 84, 0.5);
+      }
+      .btn-tool.btn-danger-tool:hover {
+        background: #dc3545;
+        border-color: #dc3545;
+      }
+      .sep {
+        width: 1px;
+        height: 22px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 0 2px;
+      }
+      .toolbar-box.vertical .sep {
+        width: 22px;
+        height: 1px;
+        margin: 2px 0;
+      }
+      .char-badge {
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .char-group {
+        display: flex;
+        gap: 4px;
+        flex-wrap: nowrap;
+      }
+      .toolbar-box.vertical .char-group {
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar-box" id="toolbar">
+      <div class="drag-handle" title="Arrastar barra">
+        <i class="bi bi-grip-vertical" id="drag-icon"></i>
+      </div>
+
+      <!-- Sync Action -->
+      <button class="btn btn-tool btn-sync" id="btn-sync" title="Alternar Sync Action (espelhar teclas/cliques)">
+        <i class="bi bi-broadcast"></i>
+      </button>
+
+      <!-- Ocultar/Mostrar clientes -->
+      <button class="btn btn-tool" id="btn-toggle-clients" title="Ocultar / Mostrar todas as janelas do jogo">
+        <i class="bi bi-eye"></i>
+      </button>
+
+      <!-- Alinhar Câmera -->
+      <button class="btn btn-tool" id="btn-align-cam" title="Alinhar Câmera dos membros com o líder">
+        <i class="bi bi-camera-video"></i>
+      </button>
+
+      <!-- Alinhar HUD Grid -->
+      <button class="btn btn-tool" id="btn-grid" title="Mostrar/Esconder Grid de Alinhamento de HUD">
+        <i class="bi bi-grid-3x3"></i>
+      </button>
+
+      <div class="sep"></div>
+
+      <!-- Clientes ativos numerados para foco imediato -->
+      <div class="char-group" id="char-buttons"></div>
+
+      <div class="sep"></div>
+
+      <!-- Presets rápidos -->
+      <button class="btn btn-tool" id="btn-presets" title="Disparar primeiro preset do grupo ativo">
+        <i class="bi bi-lightning-charge"></i>
+      </button>
+
+      <!-- Parar tudo -->
+      <button class="btn btn-tool btn-danger-tool" id="btn-stop-all" title="Parar todos os presets e sync">
+        <i class="bi bi-stop-circle"></i>
+      </button>
+
+      <div class="sep"></div>
+
+      <!-- Busca rápida -->
+      <button class="btn btn-tool" id="btn-search" title="Abrir Busca Rápida (Ctrl+Espaço)">
+        <i class="bi bi-search"></i>
+      </button>
+
+      <!-- Calculadora -->
+      <button class="btn btn-tool" id="btn-calc" title="Calculadora de Livros Divinos">
+        <i class="bi bi-calculator"></i>
+      </button>
+
+      <!-- Sync Log -->
+      <button class="btn btn-tool" id="btn-synclog" title="Abrir Diagnóstico & Log do Sync">
+        <i class="bi bi-speedometer2"></i>
+      </button>
+
+      <!-- Alternar Horizontal / Vertical -->
+      <button class="btn btn-tool" id="btn-orientation" title="Alternar Horizontal / Vertical">
+        <i class="bi bi-arrow-repeat"></i>
+      </button>
+
+      <!-- Fechar Toolbar -->
+      <button class="btn btn-tool" id="btn-close" title="Fechar barra de ferramentas">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <script type="module" src="js/toolbar.js"></script>
+  </body>
+</html>

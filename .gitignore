@@ -1,0 +1,7 @@
+node_modules/
+dist/
+bin/
+native/*/bin/
+native/*/obj/
+native/FakeClient/out/
+*.log

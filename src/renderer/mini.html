@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Grupo</title>
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div class="mini">
+      <div class="mini-titlebar">
+        <i class="bi bi-diagram-3"></i>
+        <span class="text-truncate flex-grow-1" id="title">Grupo</span>
+        <button class="btn btn-sm btn-link text-body" id="btn-main" title="Abrir PW Manager"><i class="bi bi-box-arrow-up-right"></i></button>
+        <button class="btn btn-sm btn-link text-body" id="btn-pin" title="Fixar no topo"><i class="bi bi-pin-angle"></i></button>
+        <button class="btn btn-sm btn-link text-body" id="btn-min" title="Minimizar"><i class="bi bi-dash-lg"></i></button>
+        <button class="btn btn-sm btn-link text-body" id="btn-close" title="Fechar"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="mini-body" id="body"></div>
+    </div>
+    <div class="toast-stack" id="toasts"></div>
+    <script type="module" src="js/mini.js"></script>
+  </body>
+</html>
